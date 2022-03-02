@@ -1,10 +1,24 @@
 ---
 title: "DS202-HW6"
-author: "Craig Orman, "
+author: "Craig Orman, Ngoc Nguyen"
 date: "2/28/2022"
 output: html_document
 ---
+Link to the [Github Project](https://github.com/ArgentCode/DS202-HW6 "Github Project")
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+```{r}
+#Instaniate stuff
+library(tidyverse)
+happy <- readRDS("data/HAPPY.rds")
+```
+
+```{r}
+happy$HAPPY = as.factor(happy$HAPPY)
+
+```
+
