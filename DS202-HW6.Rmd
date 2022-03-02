@@ -34,10 +34,13 @@ happy = replace(happy, happy =="DK", NA)
 ```
 
 ### Question 2
+
 Check the type of the variable and cast into the right type (factor variable for categorical variables). For age, change “89 OR OLDER” to 89 and assume the variable should be numeric.
 
-```{r}
+
 happy$HAPPY = as.factor(happy$HAPPY)
+happy$AGE[happy$AGE == "89 OR OLDER"] = 89
+happy$AGE = as.numeric(happy$AGE)
 happy$SEX = as.factor(happy$SEX)
 happy$MARITAL = as.factor(happy$MARITAL)
 happy$DEGREE = as.factor(happy$DEGREE)
@@ -45,4 +48,29 @@ happy$FINRELA = as.factor(happy$FINRELA)
 happy$HEALTH = as.factor(happy$HEALTH)
 happy$PARTYID = as.factor(happy$PARTYID)
 happy$POLVIEWS = as.factor(happy$POLVIEWS)
+
+```{r}
+
+happy = 
+  happy %>% mutate(AGE = replace(AGE, AGE == "89 OR OLDER", 89)) %>% 
+  mutate(AGE = as.numeric(AGE),
+         HAPPY = as.factor(HAPPY),
+         SEX = as.factor(SEX),
+         MARITAL = as.factor(MARITAL),
+         DEGREE = as.factor(DEGREE),
+         FINRELA = as.factor(FINRELA),
+         HEALTH = as.factor(HEALTH),
+         PARTYID = as.factor(PARTYID),
+         POLVIEWS = as.factor(POLVIEWS))
+```
+
+### Question 3
+
+Bring all levels of factors into a sensible order. For marital you could e.g. order the levels according to average age.
+
+make happy letters small letters
+marital is fine
+degree needs rework
+```{r}
+
 ```
