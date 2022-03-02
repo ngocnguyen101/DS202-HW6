@@ -5,6 +5,7 @@ date: "2/28/2022"
 output: html_document
 ---
 Link to the [Github Project](https://github.com/ArgentCode/DS202-HW6 "Github Project")
+link to the [homework](https://yumouqiu.github.io/DS202-Spring2022/Practice/practice03.html) is found under the heading '02/28 Lecture 3-4-Practice for dplyr' 
 
 
 ```{r setup, include=FALSE}
@@ -16,9 +17,32 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 happy <- readRDS("data/HAPPY.rds")
 ```
+### Question 1
+
+Data cleaning: the values “IAP”, “DK” and “NA” all encode missing values. Replace all of these instances by the value NA.
+
+```{r}
+
+# another option
+#happy[happy == "IAP"] = NA
+#happy[happy == "NA"] = NA
+#happy[happy == "DK"] = NA
+
+happy = replace(happy, happy =="IAP", NA)
+happy = replace(happy, happy =="NA", NA)
+happy = replace(happy, happy =="DK", NA)
+```
+
+### Question 2
+Check the type of the variable and cast into the right type (factor variable for categorical variables). For age, change “89 OR OLDER” to 89 and assume the variable should be numeric.
 
 ```{r}
 happy$HAPPY = as.factor(happy$HAPPY)
-
+happy$SEX = as.factor(happy$SEX)
+happy$MARITAL = as.factor(happy$MARITAL)
+happy$DEGREE = as.factor(happy$DEGREE)
+happy$FINRELA = as.factor(happy$FINRELA)
+happy$HEALTH = as.factor(happy$HEALTH)
+happy$PARTYID = as.factor(happy$PARTYID)
+happy$POLVIEWS = as.factor(happy$POLVIEWS)
 ```
-
