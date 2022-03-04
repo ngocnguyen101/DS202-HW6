@@ -15,6 +15,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 #Instaniate stuff
 library(tidyverse)
+library(ggmosaic)
+library(reshape2)
 happy <- readRDS("data/HAPPY.rds")
 ```
 ### Question 1
@@ -37,17 +39,6 @@ happy = replace(happy, happy =="DK", NA)
 
 Check the type of the variable and cast into the right type (factor variable for categorical variables). For age, change “89 OR OLDER” to 89 and assume the variable should be numeric.
 
-
-happy$HAPPY = as.factor(happy$HAPPY)
-happy$AGE[happy$AGE == "89 OR OLDER"] = 89
-happy$AGE = as.numeric(happy$AGE)
-happy$SEX = as.factor(happy$SEX)
-happy$MARITAL = as.factor(happy$MARITAL)
-happy$DEGREE = as.factor(happy$DEGREE)
-happy$FINRELA = as.factor(happy$FINRELA)
-happy$HEALTH = as.factor(happy$HEALTH)
-happy$PARTYID = as.factor(happy$PARTYID)
-happy$POLVIEWS = as.factor(happy$POLVIEWS)
 
 ```{r}
 
@@ -73,4 +64,58 @@ marital is fine
 degree needs rework
 ```{r}
 
+happy$DEGREE <- factor(happy$DEGREE, levels=c("LT HIGH SCHOOL",
+                           "HIGH SCHOOL",
+                           "JUNIOR COLLEGE",
+                           "BACHELOR",
+                           "GRADUATE"))
+
+happy$FINRELA <- factor(happy$FINRELA, levels=c("FAR BELOW AVERAGE",
+                                                "BELOW AVERAGE",
+                                                "AVERAGE",
+                                                "ABOVE AVERAGE",
+                                                "FAR ABOVE AVERAGE"))
+
+happy$HEALTH <- factor(happy$HEALTH, levels=c("POOR",
+                                              "FAIR",
+                                              "GOOD",
+                                              "EXCELLENT"))
+
+
+happy$PARTYID <- factor(happy$PARTYID, levels=c("STRONG DEMOCRAT",
+                                                "NOT STR DEMOCRAT",
+                                                "IND,NEAR DEM",
+                                                "INDEPENDENT",
+                                                "IND,NEAR REP",
+                                                "NOT STR REPUBLICAN",
+                                                "STRONG REPUBLICAN",
+                                                "OTHER PARTY"))
+
+happy$POLVIEWS <- factor(happy$POLVIEWS, levels=c("EXTREMELY LIBERAL",
+                                                  "LIBERAL",
+                                                  "SLIGHTLY LIBERAL",
+                                                  "MODERATE",
+                                                  "SLGHTLY CONSERVATIVE",
+                                                  "CONSERVATIVE",
+                                                  "EXTRMLY CONSERVATIVE"))
+
+```
+
+# Save the final data set as RDS file (binary R data) using the command:saveRDS
+
+### Craigs question
+
+We are investigating happiness and I am curious if there is a correlation between happiness and martial status and/or wealth. First, I will attempt to see if wealth and marital status are correlated. If they are highly correlated I can only use one of them (independence assumption of statistics). 
+
+```{r}
+ggplot(na.omit(happy), aes(x=MARITAL, fill=FINRELA)) +
+  geom_bar(position = "fill")  +
+  ylab("Percentage") +
+  ggtitle("Martial and Financial status") #As a percentage
+```
+
+From a quick glance, we see that married people are weak-moderate correlated with being better off than single people who are slighly better off than separated/divorced people. I do not see any large disparities, so I think we can move on.
+
+```{r}
+ggplot(happy) + geom_mosaic(aes(x = FINRELA, fill = MARITAL, weight = 1))
 ```
