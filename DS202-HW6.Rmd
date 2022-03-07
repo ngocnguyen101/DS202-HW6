@@ -35,69 +35,71 @@ happy = replace(happy, happy =="NA", NA)
 happy = replace(happy, happy =="DK", NA)
 ```
 
-### Question 2
+### Question 2 & 3
 
 Check the type of the variable and cast into the right type (factor variable for categorical variables). For age, change “89 OR OLDER” to 89 and assume the variable should be numeric.
 
-
-```{r}
-
-happy = 
-  happy %>% mutate(AGE = replace(AGE, AGE == "89 OR OLDER", 89)) %>% 
-  mutate(AGE = as.numeric(AGE),
-         HAPPY = as.factor(HAPPY),
-         SEX = as.factor(SEX),
-         MARITAL = as.factor(MARITAL),
-         DEGREE = as.factor(DEGREE),
-         FINRELA = as.factor(FINRELA),
-         HEALTH = as.factor(HEALTH),
-         PARTYID = as.factor(PARTYID),
-         POLVIEWS = as.factor(POLVIEWS))
-```
-
-### Question 3
-
 Bring all levels of factors into a sensible order. For marital you could e.g. order the levels according to average age.
-
-make happy letters small letters
-marital is fine
-degree needs rework
 ```{r}
 
-happy$DEGREE <- factor(happy$DEGREE, levels=c("LT HIGH SCHOOL",
-                           "HIGH SCHOOL",
-                           "JUNIOR COLLEGE",
-                           "BACHELOR",
-                           "GRADUATE"))
+happy <- happy %>% mutate(
+  degree = factor(tolower(DEGREE)),
+  degree = factor(degree, levels=c("lt high school",
+                                   "high school",
+                                   "junior college",
+                                   "bachelor",
+                                   "graduate school"))
+) %>% select(-DEGREE)
 
-happy$FINRELA <- factor(happy$FINRELA, levels=c("FAR BELOW AVERAGE",
-                                                "BELOW AVERAGE",
-                                                "AVERAGE",
-                                                "ABOVE AVERAGE",
-                                                "FAR ABOVE AVERAGE"))
+happy = happy %>% mutate(
+  happiness = factor(tolower(HAPPY))
+) %>% select(-HAPPY)
 
-happy$HEALTH <- factor(happy$HEALTH, levels=c("POOR",
-                                              "FAIR",
-                                              "GOOD",
-                                              "EXCELLENT"))
+happy = happy %>% mutate(
+  finrela = factor(FINRELA, levels=c("FAR BELOW AVERAGE",
+                                     "BELOW AVERAGE",
+                                     "AVERAGE",
+                                     "ABOVE AVERAGE",
+                                     "FAR ABOVE AVERAGE")),
+  finrela= factor(tolower(finrela))
+)  %>% select(-FINRELA)
 
+happy = happy %>% mutate(
+  health = factor(HEALTH, levels=c("POOR",
+                                   "FAIR",
+                                   "GOOD",
+                                   "EXCELLENT")),
+  health = factor(tolower(health))
+)  %>% select(-HEALTH)
 
-happy$PARTYID <- factor(happy$PARTYID, levels=c("STRONG DEMOCRAT",
-                                                "NOT STR DEMOCRAT",
-                                                "IND,NEAR DEM",
-                                                "INDEPENDENT",
-                                                "IND,NEAR REP",
-                                                "NOT STR REPUBLICAN",
-                                                "STRONG REPUBLICAN",
-                                                "OTHER PARTY"))
+happy = happy %>% mutate(
+  partyid = factor(PARTYID, levels=c("STRONG DEMOCRAT",
+                                    "NOT STR DEMOCRAT",
+                                    "IND,NEAR DEM",
+                                    "INDEPENDENT",
+                                    "IND,NEAR REP",
+                                    "NOT STR REPUBLICAN",
+                                    "STRONG REPUBLICAN",
+                                    "OTHER PARTY")),
+  partyid = factor(tolower(partyid))
+)  %>% select(-PARTYID)
 
-happy$POLVIEWS <- factor(happy$POLVIEWS, levels=c("EXTREMELY LIBERAL",
-                                                  "LIBERAL",
-                                                  "SLIGHTLY LIBERAL",
-                                                  "MODERATE",
-                                                  "SLGHTLY CONSERVATIVE",
-                                                  "CONSERVATIVE",
-                                                  "EXTRMLY CONSERVATIVE"))
+happy = happy %>% mutate(
+  polviews = factor(POLVIEWS, levels=c("EXTREMELY LIBERAL",
+                                      "LIBERAL",
+                                      "SLIGHTLY LIBERAL",
+                                      "MODERATE",
+                                      "SLGHTLY CONSERVATIVE",
+                                      "CONSERVATIVE",
+                                      "EXTRMLY CONSERVATIVE")),
+  polviews = factor(tolower(polviews))
+)  %>% select(-POLVIEWS)
+
+happy = happy %>% mutate(
+  marital = factor(tolower(MARITAL)),
+  sex = factor(tolower(SEX))
+) %>% select(-SEX, -MARITAL)
+
 
 ```
 
@@ -105,17 +107,8 @@ happy$POLVIEWS <- factor(happy$POLVIEWS, levels=c("EXTREMELY LIBERAL",
 
 ### Craigs question
 
-We are investigating happiness and I am curious if there is a correlation between happiness and martial status and/or wealth. First, I will attempt to see if wealth and marital status are correlated. If they are highly correlated I can only use one of them (independence assumption of statistics). 
+Two questions that interest me about this data are, what is the relationship between degree and gender, and what is the relationship between age and marital status
 
 ```{r}
-ggplot(na.omit(happy), aes(x=MARITAL, fill=FINRELA)) +
-  geom_bar(position = "fill")  +
-  ylab("Percentage") +
-  ggtitle("Martial and Financial status") #As a percentage
-```
 
-From a quick glance, we see that married people are weak-moderate correlated with being better off than single people who are slighly better off than separated/divorced people. I do not see any large disparities, so I think we can move on.
-
-```{r}
-ggplot(happy) + geom_mosaic(aes(x = FINRELA, fill = MARITAL, weight = 1))
 ```
