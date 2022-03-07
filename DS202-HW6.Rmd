@@ -56,43 +56,44 @@ happy = happy %>% mutate(
 ) %>% select(-HAPPY)
 
 happy = happy %>% mutate(
-  finrela = factor(FINRELA, levels=c("FAR BELOW AVERAGE",
-                                     "BELOW AVERAGE",
-                                     "AVERAGE",
-                                     "ABOVE AVERAGE",
-                                     "FAR ABOVE AVERAGE")),
-  finrela= factor(tolower(finrela))
+  
+  finrela= factor(tolower(FINRELA)),
+  finrela = factor(finrela, levels=c("far below average",
+                                     "below average",
+                                     "average",
+                                     "above average",
+                                     "far above average"))
 )  %>% select(-FINRELA)
 
 happy = happy %>% mutate(
-  health = factor(HEALTH, levels=c("POOR",
-                                   "FAIR",
-                                   "GOOD",
-                                   "EXCELLENT")),
-  health = factor(tolower(health))
+  health = factor(tolower(HEALTH)),
+  health = factor(health, levels=c("poor",
+                                   "fair",
+                                   "good",
+                                   "excellent"))
 )  %>% select(-HEALTH)
 
 happy = happy %>% mutate(
-  partyid = factor(PARTYID, levels=c("STRONG DEMOCRAT",
-                                    "NOT STR DEMOCRAT",
-                                    "IND,NEAR DEM",
-                                    "INDEPENDENT",
-                                    "IND,NEAR REP",
-                                    "NOT STR REPUBLICAN",
-                                    "STRONG REPUBLICAN",
-                                    "OTHER PARTY")),
-  partyid = factor(tolower(partyid))
+  partyid = factor(tolower(PARTYID)),
+  partyid = factor(partyid, levels=c("strong democrat",
+                                    "not str democrat",
+                                    "ind,near dem",
+                                    "independent",
+                                    "ind,near rep",
+                                    "not str republican",
+                                    "strong republican",
+                                    "other party"))
 )  %>% select(-PARTYID)
 
 happy = happy %>% mutate(
-  polviews = factor(POLVIEWS, levels=c("EXTREMELY LIBERAL",
-                                      "LIBERAL",
-                                      "SLIGHTLY LIBERAL",
-                                      "MODERATE",
-                                      "SLGHTLY CONSERVATIVE",
-                                      "CONSERVATIVE",
-                                      "EXTRMLY CONSERVATIVE")),
-  polviews = factor(tolower(polviews))
+  polviews = factor(tolower(POLVIEWS)),
+  polviews = factor(polviews, levels=c("extremely liberal",
+                                      "liberal",
+                                      "slightly liberal",
+                                      "moderate",
+                                      "slghtly conservative",
+                                      "conservative",
+                                      "extrmly conservative"))
 )  %>% select(-POLVIEWS)
 
 happy = happy %>% mutate(
@@ -107,8 +108,15 @@ happy = happy %>% mutate(
 
 ### Craigs question
 
-Two questions that interest me about this data are, what is the relationship between degree and gender, and what is the relationship between age and marital status
+One question I am curious about with this data is the relationship between finances, partyid, and sex
 
+I have ommited all NA's as I am attempting to compare those who did answer the questions. Our data shows that regardless of political partyid, women make less than men on average, and republicans on average make more than democrats, independents, and a sampling of other parties.
 ```{r}
-
+#degree and health to happiness
+na.omit(happy) %>% group_by(partyid, sex) %>% summarise(
+  m.finrela = mean(as.numeric(finrela), na.rm=TRUE)) %>%
+  ggplot(aes(x=partyid, fill=sex)) +
+  geom_bar(aes(weight=m.finrela), position=position_dodge()) +
+  ylab("Mean Finances") +
+  coord_flip()
 ```
