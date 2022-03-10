@@ -98,17 +98,21 @@ happy = happy %>% mutate(
 
 happy = happy %>% mutate(
   marital = factor(tolower(MARITAL)),
-  sex = factor(tolower(SEX))
-) %>% select(-SEX, -MARITAL)
+  sex = factor(tolower(SEX)),
+  year = YEAR,
+  age = AGE,
+  wtssall = WTSSALL,
+) %>% select(-SEX, -MARITAL, -YEAR, -AGE, -WTSSALL)
 
+saveRDS(happy,"happy.rds")
 
 ```
 
-# Save the final data set as RDS file (binary R data) using the command:saveRDS
+
 
 ### Craigs question
 
-One question I am curious about with this data is the relationship between finances, partyid, and sex
+One question I am curious about with this data is the relationship between finances, partyid, and sex.
 
 I have ommited all NA's as I am attempting to compare those who did answer the questions. Our data shows that regardless of political partyid, women make less than men on average, and republicans on average make more than democrats, independents, and a sampling of other parties.
 ```{r}
