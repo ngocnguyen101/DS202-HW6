@@ -120,3 +120,15 @@ na.omit(happy) %>% group_by(partyid, sex) %>% summarise(
   ylab("Mean Finances") +
   coord_flip()
 ```
+
+### Ngoc question
+I want to experiment the relationship between Happiness and Health and Education. 
+From out data, percentage of people feel "very happy" less than "not too happy" and "pretty happy" if they have poor health condition. The happiness level increasing with better health condition. For example,  in "excellent" health condition, percentage of "very happy" is highest. On the other hand, the mean of education level also increase with better health condition and people with higher education level also feel happier. 
+
+```{r}
+na.omit(happy) %>% group_by(health, happiness) %>% summarise(
+  m.degree = mean(as.numeric(degree), na.rm=TRUE)) %>%
+  ggplot(aes(x=health, fill=happiness)) +
+  geom_bar(aes(weight=m.degree), position=position_dodge()) +
+  ylab("Mean education") 
+```
