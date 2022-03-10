@@ -112,16 +112,16 @@ saveRDS(happy,"happy.rds")
 
 ### Craigs question
 
-One question I am curious about with this data is the relationship between finances, partyid, and sex.
+One question I am curious about with this data is the relationship between happiness, partyid, and sex.
 
-I have ommited all NA's as I am attempting to compare those who did answer the questions. Our data shows that regardless of political partyid, women make less than men on average, and republicans on average make more than democrats, independents, and a sampling of other parties.
+I have ommited all NA's as I am attempting to compare those who did answer the questions. I have decided to investigate the mean happiness amongst partyid and separate them by sex. We can see that the happiest people tend to be female republicans, with independent near democrat men being the lowest. Women are fairly consistently more happy than men, and the more republican someone is, the happier they seem to be.
 ```{r}
 #degree and health to happiness
 na.omit(happy) %>% group_by(partyid, sex) %>% summarise(
-  m.finrela = mean(as.numeric(finrela), na.rm=TRUE)) %>%
+  m.happiness = mean(as.numeric(happiness), na.rm=TRUE)) %>%
   ggplot(aes(x=partyid, fill=sex)) +
-  geom_bar(aes(weight=m.finrela), position=position_dodge()) +
-  ylab("Mean Finances") +
+  geom_bar(aes(weight=m.happiness), position=position_dodge()) +
+  ylab("Mean Happiness") +
   coord_flip()
 ```
 
